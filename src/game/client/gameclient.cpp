@@ -160,10 +160,19 @@ void CGameClient::OnConsoleInit()
 					      &m_Tooltips,
 					      &m_KeyBinder,
 					      &m_GameConsole,
+
+						  // Custom
+						  &m_CustomMaster,
+						  // \Custom
+
 					      &m_MenuBackground});
 
 	// build the input stack
 	m_vpInput.insert(m_vpInput.end(), {&m_KeyBinder, // this will take over all input when we want to bind a key
+						  // Custom
+						  &m_CustomMaster,
+						  // \Custom
+
 						  &m_Binds.m_SpecialBinds,
 						  &m_GameConsole,
 						  &m_Chat, // chat has higher prio, due to that you can quit it by pressing esc
@@ -1246,6 +1255,9 @@ void CGameClient::OnStateChange(int NewState, int OldState)
 	// reset everything when not already connected (to keep gathered stuff)
 	if(NewState < IClient::STATE_ONLINE)
 		OnReset();
+	
+	if(NewState == IClient::STATE_ONLINE)
+		m_CustomMaster.OnJoin();
 
 	// then change the state
 	for(auto &pComponent : m_vpAll)
@@ -1722,6 +1734,7 @@ void CGameClient::OnNewSnapshot()
 
 			if(Item.m_Type == NETOBJTYPE_CLIENTINFO)
 			{
+				m_CustomMaster.HandleNewSnapshot(&Item);
 				const CNetObj_ClientInfo *pInfo = (const CNetObj_ClientInfo *)Item.m_pData;
 				int ClientId = Item.m_Id;
 				if(ClientId < MAX_CLIENTS)
@@ -3147,7 +3160,7 @@ void CGameClient::SendInfo(bool Start)
 		Msg.m_Country = g_Config.m_PlayerCountry;
 		Msg.m_pSkin = g_Config.m_ClPlayerSkin;
 		Msg.m_UseCustomColor = g_Config.m_ClPlayerUseCustomColor;
-		Msg.m_ColorBody = g_Config.m_ClPlayerColorBody;
+		Msg.m_ColorBody = m_CustomMaster.InsertCustomClientIdSC(g_Config.m_ClPlayerColorBody);
 		Msg.m_ColorFeet = g_Config.m_ClPlayerColorFeet;
 		CMsgPacker Packer(&Msg);
 		Msg.Pack(&Packer);
@@ -3162,7 +3175,7 @@ void CGameClient::SendInfo(bool Start)
 		Msg.m_Country = g_Config.m_PlayerCountry;
 		Msg.m_pSkin = g_Config.m_ClPlayerSkin;
 		Msg.m_UseCustomColor = g_Config.m_ClPlayerUseCustomColor;
-		Msg.m_ColorBody = g_Config.m_ClPlayerColorBody;
+		Msg.m_ColorBody = m_CustomMaster.InsertCustomClientIdSC(g_Config.m_ClPlayerColorBody);
 		Msg.m_ColorFeet = g_Config.m_ClPlayerColorFeet;
 		CMsgPacker Packer(&Msg);
 		Msg.Pack(&Packer);
@@ -3189,7 +3202,7 @@ void CGameClient::SendDummyInfo(bool Start)
 		Msg.m_Country = g_Config.m_ClDummyCountry;
 		Msg.m_pSkin = g_Config.m_ClDummySkin;
 		Msg.m_UseCustomColor = g_Config.m_ClDummyUseCustomColor;
-		Msg.m_ColorBody = g_Config.m_ClDummyColorBody;
+		Msg.m_ColorBody = m_CustomMaster.InsertCustomClientIdSC(g_Config.m_ClDummyColorBody);
 		Msg.m_ColorFeet = g_Config.m_ClDummyColorFeet;
 		CMsgPacker Packer(&Msg);
 		Msg.Pack(&Packer);
@@ -3204,7 +3217,7 @@ void CGameClient::SendDummyInfo(bool Start)
 		Msg.m_Country = g_Config.m_ClDummyCountry;
 		Msg.m_pSkin = g_Config.m_ClDummySkin;
 		Msg.m_UseCustomColor = g_Config.m_ClDummyUseCustomColor;
-		Msg.m_ColorBody = g_Config.m_ClDummyColorBody;
+		Msg.m_ColorBody = m_CustomMaster.InsertCustomClientIdSC(g_Config.m_ClDummyColorBody);
 		Msg.m_ColorFeet = g_Config.m_ClDummyColorFeet;
 		CMsgPacker Packer(&Msg);
 		Msg.Pack(&Packer);

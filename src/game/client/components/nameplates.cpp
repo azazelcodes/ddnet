@@ -5,6 +5,7 @@
 #include <engine/shared/config.h>
 #include <engine/shared/protocol7.h>
 #include <engine/textrender.h>
+#include <engine/external/ddnet-custom-clients/custom_clients_ids.h>
 
 #include <generated/client_data.h>
 
@@ -48,6 +49,7 @@ public:
 	bool m_ShowHookStrongWeakId;
 	int m_HookStrongWeakId;
 	float m_FontSizeHookStrongWeak;
+	int m_UserModifiedClient;
 };
 
 // Part Types
@@ -475,6 +477,62 @@ public:
 		CNamePlatePartText(This) {}
 };
 
+// CUSTOM
+class CNamePlatePartClientIndicator : public CNamePlatePartSprite
+{
+protected:
+	void Update(CGameClient &This, const CNamePlateData &Data) override
+	{
+		// Modified from RushieClient-ddnet
+		m_ShiftOnInvis = false; // Only shift (horizontally) the other parts if directions as a whole is visible
+		m_Size = vec2(24.0f + DEFAULT_PADDING, 24.0f + DEFAULT_PADDING);
+		m_Visible = (Data.m_UserModifiedClient != -1 && Data.m_ShowName);
+
+		char aBuf[128];
+		str_format(aBuf, sizeof(aBuf), "%d - %d", Data.m_UserModifiedClient, m_Visible);
+		This.Console()->Print(IConsole::OUTPUT_LEVEL_STANDARD, "Custom", aBuf);
+
+		switch(Data.m_UserModifiedClient)
+		{
+		case CUSTOM_CLIENT_ID_KAIZO_NETWORK:
+			m_Sprite = SPRITE_KAIZO_ICON;
+			break;
+		case CUSTOM_CLIENT_ID_PDUCKCLIENT:
+			m_Sprite = SPRITE_PDUCK_ICON;
+			break;
+		case CUSTOM_CLIENT_ID_GAMER_07:
+			m_Sprite = SPRITE_GAMER07_ICON;
+			break;
+		case CUSTOM_CLIENT_ID_ZILLYWOODS_07:
+			m_Sprite = SPRITE_ZILLYWOODS07_ICON;
+			break;
+		case CUSTOM_CLIENT_ID_FCLIENT_07:
+			m_Sprite = SPRITE_FCLIENT07_ICON;
+			break;
+		case CUSTOM_CLIENT_ID_CUSTOM:
+			m_Sprite = SPRITE_CUSTOM_ICON;
+			break;
+		case CUSTOM_CLIENT_ID_CHILLERBOTUX:
+			m_Sprite = SPRITE_CHILLERBOTUX_ICON;
+			break;
+		case CUSTOM_CLIENT_ID_CHILLERBOTUX+1:
+			m_Sprite = SPRITE_RUSHIE_ICON;
+			break;
+		}
+
+		m_Color.a = Data.m_Color.a;
+	}
+
+public:
+	CNamePlatePartClientIndicator(CGameClient &This) :
+		CNamePlatePartSprite(This)
+	{
+		m_Texture = g_pData->m_aImages[IMAGE_MODICONS].m_Id;
+		m_Padding = vec2(0.0f, 0.0f);
+	}
+};
+// \CUSTOM
+
 // Name Plates
 
 class CNamePlate
@@ -517,6 +575,8 @@ private:
 		AddPart<CNamePlatePartDirection>(This, DIRECTION_RIGHT);
 		AddPart<CNamePlatePartNewLine>(This);
 
+		AddPart<CNamePlatePartClientIndicator>(This);
+		
 		AddPart<CNamePlatePartFriendMark>(This);
 		AddPart<CNamePlatePartClientId>(This, false);
 		AddPart<CNamePlatePartName>(This);
@@ -759,6 +819,10 @@ void CNamePlates::RenderNamePlateGame(vec2 Position, const CNetObj_PlayerInfo *p
 			}
 		}
 	}
+
+	// CUSTOM
+	Data.m_UserModifiedClient = GameClient()->m_CustomMaster.TryGetClient(pPlayerInfo->m_ClientId);
+	// \CUSTOM
 
 	// Check if the nameplate is actually on screen
 	CNamePlate &NamePlate = m_pData->m_aNamePlates[pPlayerInfo->m_ClientId];

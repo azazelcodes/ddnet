@@ -69,6 +69,8 @@
 #include "components/touch_controls.h"
 #include "components/voting.h"
 
+#include "components/custom/master.h"
+
 #include <memory>
 #include <vector>
 
@@ -190,6 +192,9 @@ public:
 	CTooltips m_Tooltips;
 
 	CLocalServer m_LocalServer;
+
+	// Custom Client
+	CCMaster m_CustomMaster;
 
 private:
 	std::vector<class CComponent *> m_vpAll;
@@ -538,6 +543,10 @@ public:
 
 		// 0.7 Skin
 		CSixup m_aSixup[NUM_DUMMIES];
+
+		// CUSTOM
+		int m_CustomClient = -1;
+		// \CUSTOM
 	};
 
 	CClientData m_aClients[MAX_CLIENTS];

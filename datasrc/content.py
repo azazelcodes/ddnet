@@ -258,6 +258,8 @@ image_audio_source = Image("audio_source", "editor/audio_source.png")
 image_strongweak = Image("strongweak", "strong_weak.png")
 image_hud = Image("hud", "hud.png")
 image_extras = Image("extras", "extras.png")
+# CUSTOM
+image_client_icons = Image("modicons", "external/client_icons.png")
 
 container.images.Add(image_null)
 container.images.Add(image_game)
@@ -275,6 +277,8 @@ container.images.Add(image_strongweak)
 container.images.Add(image_hud)
 container.images.Add(image_extras)
 container.images.Add(Image("raceflag", "race_flag.png"))
+# CUSTOM
+container.images.Add(image_client_icons)
 
 container.pickups.Add(Pickup("health"))
 container.pickups.Add(Pickup("armor"))
@@ -296,6 +300,8 @@ set_audio_source = SpriteSet("audio_source", image_audio_source, 1, 1)
 set_strongweak = SpriteSet("strongweak", image_strongweak, 3, 1)
 set_hud = SpriteSet("hud", image_hud, 16, 16)
 set_extras = SpriteSet("extras", image_extras, 16, 16)
+# CUSTOM
+set_client_icons = SpriteSet("modicons", image_client_icons, 8, 1)
 
 container.spritesets.Add(set_particles)
 container.spritesets.Add(set_game)
@@ -308,6 +314,8 @@ container.spritesets.Add(set_audio_source)
 container.spritesets.Add(set_strongweak)
 container.spritesets.Add(set_hud)
 container.spritesets.Add(set_extras)
+# CUSTOM
+container.spritesets.Add(set_client_icons)
 
 container.sprites.Add(Sprite("part_slice", set_particles, 0, 0, 1, 1))
 container.sprites.Add(Sprite("part_ball", set_particles, 1, 0, 1, 1))
@@ -438,6 +446,16 @@ container.sprites.Add(Sprite("audio_source", set_audio_source, 0, 0, 1, 1))
 container.sprites.Add(Sprite("hook_strong", set_strongweak, 0, 0, 1, 1))
 container.sprites.Add(Sprite("hook_weak", set_strongweak, 1, 0, 1, 1))
 container.sprites.Add(Sprite("hook_icon", set_strongweak, 2, 0, 1, 1))
+
+# CUSTOM
+container.sprites.Add(Sprite("custom_icon", set_client_icons, 0, 0, 1, 1))
+container.sprites.Add(Sprite("kaizo_icon", set_client_icons, 1, 0, 1, 1))
+container.sprites.Add(Sprite("pduck_icon", set_client_icons, 2, 0, 1, 1))
+container.sprites.Add(Sprite("gamer07_icon", set_client_icons, 3, 0, 1, 1))
+container.sprites.Add(Sprite("zillywoods07_icon", set_client_icons, 4, 0, 1, 1))
+container.sprites.Add(Sprite("fclient07_icon", set_client_icons, 5, 0, 1, 1))
+container.sprites.Add(Sprite("chillerbotux_icon", set_client_icons, 6, 0, 1, 1))
+container.sprites.Add(Sprite("rushie_icon", set_client_icons, 7, 0, 1, 1))
 
 container.sprites.Add(Sprite("hud_airjump", set_hud, 0, 0, 2, 2))
 container.sprites.Add(Sprite("hud_airjump_empty", set_hud, 2, 0, 2, 2))

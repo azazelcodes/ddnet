@@ -172,7 +172,7 @@ if(NOT "${CMAKE_CURRENT_BINARY_DIR}" STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}")
 endif()
 
 set(SERVER_EXECUTABLE DDNet-Server CACHE STRING "Name of the built server executable")
-set(CLIENT_EXECUTABLE DDNet CACHE STRING "Name of the build client executable")
+set(CLIENT_EXECUTABLE custom CACHE STRING "Name of the build client executable")
 
 ########################################################################
 # Compiler flags
@@ -1582,7 +1582,9 @@ set(EXPECTED_DATA
   menuimages/play_game.png
   menuimages/settings.png
   particles.png
-  race_flag.png
+
+  external/client_icons.png
+  
   shader/pipeline.frag
   shader/pipeline.vert
   shader/prim.frag
@@ -2397,6 +2399,8 @@ if(CLIENT)
     components/controls.h
     components/countryflags.cpp
     components/countryflags.h
+    components/custom/master.cpp
+    components/custom/master.h
     components/damageind.cpp
     components/damageind.h
     components/debughud.cpp
